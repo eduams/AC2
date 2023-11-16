@@ -2,7 +2,9 @@ package com.ac2.ac2;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,6 +34,11 @@ import lombok.Setter;
 @Setter
 @SpringBootApplication
 public class Ac2Application {
+			//variáveis para o tamanho dos arrays
+			int cursoSize;
+			int profSize;
+			int agendaSize;
+
 			@Bean
 	public CommandLineRunner init(
 			@Autowired CursoRepository cursoRepository,
@@ -66,11 +73,18 @@ public class Ac2Application {
 			cursoDTO1.setCargaHoraria(320);
 			cursoDTO1.setCategoriaCursoId((long) 0); 
 
-			Curso curso1 = new Curso();
-			curso1.setNome(cursoDTO1.getNome());
-			curso1.setCargaHoraria(cursoDTO1.getCargaHoraria());
-			curso1.setCategoriaCurso(categoria); 
-			cursoRepository.save(curso1);
+			//criação do array de cursos. Máximo de 5 cursos
+			Curso[] curso = new Curso[99];
+			int loop = 0;
+			while(loop < 99){
+				curso[loop] = new Curso();
+				loop++;
+			}
+			curso[0].setNome(cursoDTO1.getNome());
+			curso[0].setCargaHoraria(cursoDTO1.getCargaHoraria());
+			curso[0].setCategoriaCurso(categoria); 
+			cursoRepository.save(curso[0]);
+			cursoSize = 1;
 
 			CursoDTO cursoDTO2 = new CursoDTO();
 			cursoDTO2.setId((long) 0);
@@ -84,24 +98,8 @@ public class Ac2Application {
 			curso2.setCategoriaCurso(categoria2); 
 			cursoRepository.save(curso2);
 
-			ProfDTO prof1DTO = new ProfDTO();
-			prof1DTO.setId((long) 0);
-			prof1DTO.setNome("Piccolo");
-			prof1DTO.setCpf("000000000");
-			prof1DTO.setRg("000000000");
-			prof1DTO.setEndereco("Rua Namekusei, Jardim Kami-Sama, n-999");
-			prof1DTO.setCelular("000000000");
-			
-			Professor prof1 = new Professor();
-			prof1.setId(prof1DTO.getId());
-			prof1.setCelular(prof1DTO.getCelular());
-			prof1.setCpf(prof1DTO.getCpf());
-			prof1.setCursos(Arrays.asList(curso1)); // adiciona curso ao professor (many to many)
-			prof1.setEndereco(prof1DTO.getEndereco());
-			prof1.setNome(prof1DTO.getNome());
-			prof1.setRg(prof1DTO.getRg());
-			profRepository.save(prof1);
-			
+			ProfDTO profDTO = new ProfDTO();
+
 			ProfDTO prof2DTO = new ProfDTO();
 			prof2DTO.setId((long) 0);
 			prof2DTO.setNome("Goku");
@@ -110,45 +108,186 @@ public class Ac2Application {
 			prof2DTO.setEndereco("Rua Saiyajin, Jardim Beerus, n-8000");
 			prof2DTO.setCelular("000000000");
 
-			Professor prof2 = new Professor();
-			prof2.setId(prof2DTO.getId());
-			prof2.setCelular(prof2DTO.getCelular());
-			prof2.setCpf(prof2DTO.getCpf());
-            prof2.setCursos(Arrays.asList(curso2)); // adiciona curso ao professor (many to many)
-			prof2.setNome(prof2DTO.getNome());
-			prof2.setRg(prof2DTO.getRg());
-			profRepository.save(prof2);
+			Professor[] prof = new Professor[99];
+			loop = 0;
+			while(loop < 99){
+				prof[loop] = new Professor();
+				loop++;
+			}
+			prof[profSize].setId(prof2DTO.getId());
+			prof[profSize].setCelular(prof2DTO.getCelular());
+			prof[profSize].setCpf(prof2DTO.getCpf());
+			prof[profSize].setCursos(new ArrayList<>(Arrays.asList(curso[0])));
+			prof[profSize].getCursos().addAll(Arrays.asList(curso2));			
+			prof[profSize].setNome(prof2DTO.getNome());
+			prof[profSize].setRg(prof2DTO.getRg());
+			profRepository.save(prof[profSize]);
+			profSize = 1;
 
 			//Cadastro de entrada 1 na agenda
-			Agendamento agenda1 = new Agendamento();
-			agenda1.setId((long) 0);
-			agenda1.setCidade("Sorocaba");
-			agenda1.setEstado("São Paulo");
-			agenda1.setCep("000000000");
-			agenda1.setDatainicio(LocalDate.of(2023, 11, 13));
-			agenda1.setDatafim(LocalDate.of(2023, 11, 17));
-			agenda1.setHorarioinicio(LocalTime.of(8,0));
-			agenda1.setHorariofim(LocalTime.of(12,0));
-			agenda1.setCurso(prof1.getCursos().get(0));
-			agenda1.setProfessor(prof1);
-			agendamentoRepository.save(agenda1);
-
-			//Cadastro de entrada 2 na agenda
-			Agendamento agenda2 = new Agendamento();
-			agenda2.setId((long) 0);
-			agenda2.setCidade("Sorocaba");
-			agenda2.setEstado("São Paulo");
-			agenda2.setCep("000000000");
-			agenda2.setDatainicio(LocalDate.of(2023, 11, 20));
-			agenda2.setDatafim(LocalDate.of(2023, 11, 24));
-			agenda2.setHorarioinicio(LocalTime.of(8,0));
-			agenda2.setHorariofim(LocalTime.of(12,0));
-			agenda2.setProfessor(prof2);
-			agenda2.setCurso(prof2.getCursos().get(0));
-			agendamentoRepository.save(agenda2);
+			Agendamento agenda[] = new Agendamento[99];
+			loop = 0;
+			while(loop < 99){
+				agenda[loop] = new Agendamento();
+				loop++;
+			}
+			agenda[agendaSize].setId((long) 0);
+			agenda[agendaSize].setCidade("Sorocaba");
+			agenda[agendaSize].setEstado("São Paulo");
+			agenda[agendaSize].setCep("000000000");
+			agenda[agendaSize].setDatainicio(LocalDate.of(2023, 11, 13));
+			agenda[agendaSize].setDatafim(LocalDate.of(2023, 11, 17));
+			agenda[agendaSize].setHorarioinicio(LocalTime.of(8,0));
+			agenda[agendaSize].setHorariofim(LocalTime.of(12,0));
+			agenda[agendaSize].setCurso(prof[0].getCursos().get(0));
+			agenda[agendaSize].setProfessor(prof[0]);
+			agendamentoRepository.save(agenda[agendaSize]);
+			agendaSize = 1;
 		
+			//inputs da secretária
+			int dia;
+			int mes;
+			int ano;
+			int horas;
+			int minutos;
+			int inputProf;
+			int inputCurso;
 
+			Scanner scan = new Scanner(System.in);
+			int profInput;
+			String inputString;
+			boolean inputLoop = true;
+		while (inputLoop == true){
+			System.out.println("Digite qual operação deseja efetuar");
+			System.out.println("1 - Cadastrar professor | 2 - Cadastrar curso | "+
+			"3 - Cadastrar agenda | 4 - finalizar");
+			int input = scan.nextInt();
+			switch (input) {
+				case 1:
+					profDTO = new ProfDTO();
+					profDTO.setId((long) 0);
+
+					System.out.println("Insira um nome");
+					scan.nextLine();
+					inputString = scan.nextLine();
+					profDTO.setNome(inputString);
+
+					System.out.println("Insira um CPF");
+					inputString = scan.nextLine();
+					profDTO.setCpf(inputString);
+					
+					System.out.println("Insira um RG");
+					inputString = scan.nextLine();
+					profDTO.setRg(inputString);
+
+					System.out.println("Insira um endereço");
+					inputString = scan.nextLine();
+					profDTO.setEndereco(inputString);
+
+					System.out.println("Insira um número de celular");
+					profDTO.setCelular(inputString);
+			
+					prof[profSize].setId(profDTO.getId());
+					prof[profSize].setCelular(profDTO.getCelular());
+					prof[profSize].setCpf(profDTO.getCpf());
+					prof[profSize].setRg(profDTO.getRg());
+					prof[profSize].setEndereco(profDTO.getEndereco());
+
+					System.out.println("Atribuir cursos");
+					input = scan.nextInt();
+					prof[profSize].setCursos(new ArrayList<>(Arrays.asList(curso[input])));
+
+					profRepository.save(prof[profSize]);
+					profSize++;
+					break;
+				case 2:
+					CursoDTO cursoDTO = new CursoDTO();
+					cursoDTO.setId((long) 0);
+
+					System.out.println("Insira um curso");
+					scan.nextLine();
+					inputString = scan.nextLine();
+					cursoDTO.setNome(inputString);
+
+					System.out.println("Insira a carga horária");
+					input = scan.nextInt();
+					cursoDTO.setCargaHoraria(input);
+				
+					System.out.println("Insira a categoria");
+					input = scan.nextInt();
+					cursoDTO.setCategoriaCursoId((long) input); 
+
+					curso[cursoSize].setNome(cursoDTO.getNome());
+					curso[cursoSize].setCargaHoraria(cursoDTO.getCargaHoraria());
+					curso[cursoSize].setCategoriaCurso(categoria); 
+					cursoRepository.save(curso[cursoSize]);
+					cursoSize++;
+					break;
+				case 3:
+					agenda[agendaSize].setId((long) 0);
+
+					System.out.println("Digite a cidade");
+					scan.nextLine();
+					inputString = scan.nextLine();
+					agenda[agendaSize].setCidade(inputString);
+
+					System.out.println("Digite o estado");
+					inputString = scan.nextLine();
+					agenda[agendaSize].setEstado(inputString);
+
+					System.out.println("Digite o CEP");
+					inputString = scan.nextLine();
+					agenda[agendaSize].setCep("000000000");
+
+					System.out.println("Digite a data de início");
+					System.out.println("Digite o dia");
+					dia = scan.nextInt();
+					System.out.println("Digite o mês");
+					mes = scan.nextInt();
+					System.out.println("Digite o ano");
+					ano = scan.nextInt();
+					agenda[agendaSize].setDatainicio(LocalDate.of(ano, mes, dia));
+
+
+					System.out.println("Digite a data de fim");
+					System.out.println("Digite o dia");
+					dia = scan.nextInt();
+					System.out.println("Digite o mês");
+					mes = scan.nextInt();
+					System.out.println("Digite o ano");
+					ano = scan.nextInt();
+					agenda[agendaSize].setDatafim(LocalDate.of(ano, mes, dia));
+
+					System.out.println("Digite o horario de início");
+					System.out.println("Digite a hora");
+					horas = scan.nextInt();
+					System.out.println("Digite os minutos");
+					minutos = scan.nextInt();
+					agenda[agendaSize].setHorarioinicio(LocalTime.of(horas,minutos));
+
+					System.out.println("Digite o horario de fim");
+					System.out.println("Digite a hora");
+					horas = scan.nextInt();
+					System.out.println("Digite os minutos");
+					minutos = scan.nextInt();
+					agenda[agendaSize].setHorariofim(LocalTime.of(horas,minutos));
+
+					System.out.println("Digite o id do professor");
+					inputProf = scan.nextInt();
+					System.out.println("Digite o id do curso");
+					inputCurso = scan.nextInt();
+					agenda[agendaSize].setCurso(prof[inputProf].getCursos().get(inputCurso));
+					agenda[agendaSize].setProfessor(prof[inputProf]);
+					agendamentoRepository.save(agenda[agendaSize]);
+					agendaSize ++;
+					break;
+
+				case 4:
+					inputLoop = false;
+					break;
+			}
 			System.out.println("lalilulelo");
+			}
 		};
 	}
 
